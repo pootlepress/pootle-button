@@ -7,7 +7,7 @@
  * Author: pootlepress
  * Author URI: http://pootlepress.com/
  * License: GPL version 3
- * @developer wpdevelopment.me <shramee@wpdevelopment.me>
+ * @developer http://wpdevelopment.me <shramee@wpdevelopment.me>
  */
 add_action( 'admin_init', 'pbtn_tinymce_button' );
 function pbtn_tinymce_button() {
@@ -17,12 +17,19 @@ function pbtn_tinymce_button() {
 	}
 }
 
+add_action( 'admin_head', 'pbtn_l10n' );
+function pbtn_l10n() {
+	?>
+	<script></script>
+	<?php
+}
+
 function pbtn_register_tinymce_button( $buttons ) {
 	array_push( $buttons, 'pbtn_add_btn' );
 	return $buttons;
 }
 
 function pbtn_add_tinymce_button( $plugin_array ) {
-	$plugin_array['my_button_script'] = plugins_url( '/assets/tmce-plgn.js', __FILE__ ) ;
+	$plugin_array['pbtn_script'] = plugins_url( '/tmce-plgn.js', __FILE__ ) ;
 	return $plugin_array;
 }

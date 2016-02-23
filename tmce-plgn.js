@@ -18,10 +18,14 @@
 				cmd: 'pbtn_add_btn_cmd'
 			});
 			ed.addCommand( 'pbtn_add_btn_cmd', function() {
-				var selected_text = ed.selection.getContent();
-				var return_text = '';
-				return_text = '<button>' + selected_text + '</button>';
-				ed.execCommand('mceInsertContent', 0, return_text);
+				var return_text,
+					selected_text = ed.selection.getContent();
+				ed.windowManager.open( {
+					title: 'Insert Button',
+					url : url + '/assets/dialog.php?ajaxurl=' + ajaxurl + '&text=' + selected_text,
+					width : 500,
+					height : 500
+				}, { plugin_url : url, editor : ed } );
 			});
 		},
 		createControl : function(n, cm) {
@@ -29,5 +33,5 @@
 		},
 	});
 	/* Start the buttons */
-	tinymce.PluginManager.add( 'my_button_script', tinymce.plugins.MyButtons );
+	tinymce.PluginManager.add( 'pbtn_script', tinymce.plugins.MyButtons );
 })();
