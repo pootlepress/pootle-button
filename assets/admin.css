@@ -3,11 +3,11 @@
 	margin-bottom: 0;
 }
 
-.pbtn-item {
+#pbtn-submit {
 	display: none;
 }
 
-.pbtn-active .pbtn-item {
+.pbtn-active #pbtn-submit {
 	display: block;
 }
 
