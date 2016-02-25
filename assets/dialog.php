@@ -5,7 +5,11 @@
 		body {
 			font-family: verdana, arial, sans-serif;
 			color: #454545;
-			padding: 1em 0 3.4em;
+			padding: 0 0 3.4em;
+		}
+		p {
+			font-size: 0.8em;
+			margin: 0.25em;
 		}
 		h3 {
 			font-weight: normal;
@@ -16,11 +20,16 @@
 		}
 		.field label {
 			display: inline-block;
-			width: 160px;
+			width: 205px;
 		}
-		input:not(#submit) {
-			 font-family: "Courier New", Courier, Monaco, monospace;
+		input, select, textarea {
+			-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,.07);
+			box-shadow:inset 0 1px 2px rgba(0,0,0,.07);
+			background-color:#fff;color:#32373c;outline:0;border:1px solid #ddd;
+			-webkit-transition:50ms border-color ease-in-out;transition:50ms border-color ease-in-out;
+			margin: 1px;padding: 5px 7px; width: 200px; box-sizing: border-box;
 		}
+		input:not(#submit) { font-family: "Courier New", Courier, Monaco, monospace; }
 		input[type="checkbox"] {
 			 margin: 0;
 			 width: 16px;
@@ -51,24 +60,18 @@
 </head>
 <body>
 	<section>
-		<h3>General</h3>
-
-		<div class="field">
-			<label>Text</label>
-			<input class="button-text" name="text" type="text" placeholder="Text" value="<?php echo filter_input( INPUT_GET, 'text' ) ?>">
-		</div>
-		<div class="field">
-			<label>URL</label>
-			<input class="input-attr" name="href" type="url" placeholder="URL">
-		</div>
-		<div class="field">
-			<label>Open in a new window</label>
-			<input class="input-attr" name="target" type="checkbox" value="_blank">
-		</div>
+		<input  type="hidden" class="button-text" name="text" placeholder="Text" value="<?php echo filter_input( INPUT_GET, 'text' ) ?>">
+		<input  type="hidden" class="input-attr" name="href" placeholder="URL" value="<?php echo filter_input( INPUT_GET, 'url' ) ?>">
+		<input  type="hidden" class="input-attr" name="target"  value="<?php echo filter_input( INPUT_GET, 'target' ) ?>">
 		<h3>Colors</h3>
 		<div class="field">
 			<label>Background color</label>
-			<input class="input-style" name="background-color" type="colorpicker" data-default="#f0f0f1" placeholder="Background color">
+			<input class="input-bg-color" name="background-color" type="colorpicker" data-default="#f0f0f1" placeholder="Background color">
+		</div>
+		<div class="field">
+			<label>Second Background color</label>
+			<input class="input-bg-color2" name="background-color" type="colorpicker" data-default="" placeholder="Bottom Color for Gradient">
+			<p>Use different second background color for a beautiful gradient!</p>
 		</div>
 		<div class="field">
 			<label>Text color</label>
@@ -77,16 +80,16 @@
 		<h3>Border</h3>
 		<div class="field">
 			<label>Border color</label>
-			<input class="input-style" name="border-style" type="hidden" value="solid">
+			<input  type="hidden" class="input-style" name="border-style" value="solid">
 			<input class="input-style" name="border-color" data-default="#111112" type="colorpicker" placeholder="Border color">
 		</div>
 		<div class="field">
-			<label>Border width(pixels)</label>
-			<input class="input-style" name="border-width" type="number" placeholder="Border width">
+			<label>Border width ( pixels )</label>
+			<input class="input-style" name="border-width" type="number" min="0" max="25" placeholder="Border width">
 		</div>
 		<div class="field">
-			<label>Border Radius(pixels)</label>
-			<input class="input-style" name="border-radius" type="number" placeholder="Border Radius">
+			<label>Border Radius ( pixels )</label>
+			<input class="input-style" name="border-radius" type="number" min="0" max="100" placeholder="Border Radius">
 		</div>
 		<div class="field">
 			<label>Size</label>
@@ -108,7 +111,7 @@
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.3.0/css/bootstrap-colorpicker.min.css">
 	<script>
 		jQuery( function ( $ ) {
-			var get_input_styles,
+			var get_input_styles, get_background,
 				$style_inputs = $( '.input-style' ),
 				$submit = $( '#submit' );
 
@@ -123,30 +126,34 @@
 
 					return_text += $t.attr( 'name' ) + ':' + val + ';';
 				} );
-				return return_text + 'display:inline-block;padding: 0.5em 1em';
+				return return_text + get_background() + 'display:inline-block;padding: 0.5em 1em';
 			};
 
-			get_input_styles = function () {
-				var return_text = '';
-				$style_inputs.each( function () {
-					var $t = $( this );
-					var val = $t.val();
+			get_background = function () {
+				var return_text = '',
+					color = $( '.input-bg-color' ).val(),
+					color2 = $( '.input-bg-color2' ).val();
+				return_text += 'background:' + color + ';';
 
-					if ( ! val ) { return; }
-					if ( 'number' == $t.attr( 'type' ) ) { val = $t.val() + 'px;'; }
-
-					return_text += $t.attr( 'name' ) + ':' + val + ';';
-				} );
-				return return_text + 'display:inline-block;padding: 0.5em 1em';
+				if ( color2 ) {
+					var gradient = 'linear-gradient(' + color + ',' + color2 + ')';
+					return_text += 'background:-webkit-' + gradient + ';';
+					return_text += 'background:-o-' + gradient + ';';
+					return_text += 'background:-moz-' + gradient + ';';
+					return_text += 'background:' + gradient + ';';
+				}
+				return return_text;
 			};
 
 			$( 'input[type="colorpicker"]' ).each( function () {
-				$( this )
-					.colorpicker()
-					.colorpicker( 'setValue', $( this ).data( 'default' ) )
-					.colorpicker().on( 'changeColor.colorpicker', function () {
-						$submit.attr( 'style', get_input_styles() );
-					} );
+				var $t = $( this );
+				$t.colorpicker();
+				if ( $t.data( 'default' ) ) {
+					$t.colorpicker( 'setValue', $( this ).data( 'default' ) )
+				}
+				$t.colorpicker().on( 'changeColor.colorpicker', function () {
+					$submit.attr( 'style', get_input_styles() );
+				} );
 			} );
 
 			$submit.click( function () {
@@ -163,13 +170,11 @@
 				} );
 
 				// Button styles
-				return_text += 'style="' + get_input_styles() + '">' + $( '.button-text' ).val() + '</a>';
+				return_text += 'style="' + get_input_styles() + '">' + $( '.button-text' ).val() + "</a>&nbsp;\n";
 
 				ed.execCommand( 'mceInsertContent', 0, return_text );
-				console.log( return_text );
 				ed.windowManager.close();
 			} );
-
 
 			$style_inputs.change( function () {
 				$submit.attr( 'style', get_input_styles() );

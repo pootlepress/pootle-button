@@ -1,0 +1,16 @@
+#pbtn-submit {
+	float: right;
+	margin-bottom: 0;
+}
+
+.pbtn-item {
+	display: none;
+}
+
+.pbtn-active .pbtn-item {
+	display: block;
+}
+
+.pbtn-active #wp-link-submit {
+	display: none;
+}
