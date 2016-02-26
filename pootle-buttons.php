@@ -11,10 +11,50 @@
  */
 
 add_action( 'admin_head', 'pbtn_l10n' );
-add_action( 'wp_header', 'pbtn_l10n' );
+add_action( 'wp_head', 'pbtn_l10n' );
 function pbtn_l10n() {
 	?>
-	<script></script>
+	<script>
+		pbtn = {
+			dialogUrl : '<?php echo admin_url( 'admin-ajax.php?action=pbtn_dialog' ) ?>'
+		};
+	</script>
+	<?php
+}
+
+add_action( 'wp_footer', 'pbtn_script', 16 );
+function pbtn_script() {
+	?>
+	<style id="pbtn-styles">
+		.pbtn.align-left{float:right;}
+		.pbtn.align-center{display: block;margin: auto;}
+		.pbtn.align-right{float: right;}
+	</style>
+	<script>
+		jQuery( function ($) {
+			$( 'a.pbtn' ).hover(
+				function() {
+					var $t = $( this );
+					if ( ! $t.data( 'hover-color' ) ) {
+						$t.css( 'opacity', '0.7' );
+						return;
+					}
+					$t.data( 'background', $t.css( 'background' ) );
+					$t.css( 'background', $t.data( 'hover-color' ) );
+				},
+				function() {
+					var $t = $( this );
+					if ( ! $t.data( 'background' ) ) {
+						$t.css( 'opacity', 1 );
+						return;
+					}
+					$t.css( {
+						'background' : $t.data( 'background' ),
+					} );
+				}
+			);
+		} );
+	</script>
 	<?php
 }
 
@@ -28,4 +68,16 @@ add_filter( 'mce_external_plugins', 'pbtn_add_tinymce_button' );
 function pbtn_add_tinymce_button( $plugin_array ) {
 	$plugin_array['pbtn_script'] = plugins_url( '/tmce-plgn.js', __FILE__ ) ;
 	return $plugin_array;
+}
+
+add_filter( 'wp_kses_allowed_html', 'pbtn_kses_allowed_html' );
+function pbtn_kses_allowed_html( $tags ) {
+	$tags['a']['data-hover-color'] = true;
+
+	return $tags;
+}
+
+add_filter( 'wp_ajax_pbtn_dialog', 'pbtn_ajax_dialog' );
+function pbtn_ajax_dialog() {
+	include 'assets/dialog.php';
 }
