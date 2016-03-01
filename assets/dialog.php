@@ -216,7 +216,7 @@
 		</div>
 		<div class="field">
 			<label>Size</label>
-			<input class="input-style" name="font-size" min="5" max="70" step="2" type="range">
+			<input class="input-style" name="font-size" min="5" max="70" step="2" type="range" value="25">
 		</div>
 		<div class="field">
 			<label>Align</label>
@@ -236,7 +236,7 @@
 	<?php wp_print_footer_scripts(); ?>
 	<script src="<?php echo $_GET['assets_url'] . 'alpha-color.js' ?>"></script>
 	<link rel="stylesheet" href="<?php echo $_GET['assets_url'] . 'dashicons-select.css' ?>">
-	<script src="<?php echo $_GET['assets_url'] . 'dashicons-select.js?v=1.1' ?>"></script>
+	<script src="<?php echo $_GET['assets_url'] . 'dashicons-select.js?v=1.0.1' ?>"></script>
 
 	<script>
 		jQuery( function ( $ ) {
@@ -267,7 +267,6 @@
 					var $t = $( this ),
 						name = $t.attr( 'name' ),
 						val = params.button.attr( name );
-					console.log( name + ' : ' + val );
 					if ( val ) {
 						if ( 'checkbox' == $t.attr( 'type' ) ) {
 							$t.prop( 'checked', true );
@@ -316,7 +315,7 @@
 
 					return_text += $t.attr( 'name' ) + ':' + val + ';';
 				} );
-				return return_text + get_background() + 'display:inline-block;padding:0.5em 1em;text-decoration:none;line-height:1;';
+				return return_text + get_background() + 'display:inline-block;padding:0.5em 0.7em;text-decoration:none;line-height:1;';
 			};
 
 			get_background = function () {
@@ -337,7 +336,8 @@
 			$( 'input[type="colorpicker"]' ).each( function () {
 				var $t = $( this );
 				$t.libColorPicker( {
-					change: preview
+					change: preview,
+					clear: preview
 				} );
 			} );
 

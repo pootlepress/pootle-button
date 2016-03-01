@@ -16,7 +16,12 @@
 		$di.append( $('<br>') );
 		$.each( $.fn.dashicons, function( k, icon ) {
 			var ico = 'dashicons dashicons-' + icon;
-			$i = $( '<i/>' ).addClass( ico ).css("vertical-align","middle");
+			$i = $( '<i/>' ).addClass( ico ).css( {
+				verticalAlign : "middle",
+				fontSize: '1.2em',
+				width: '1em',
+				height: '1em'
+			} );
 			$i.click( function() {
 				var $t = $( this );
 				$input.val( $t.prop('outerHTML') ).change();
