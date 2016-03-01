@@ -28,7 +28,11 @@
 
 		.field > label {
 			display: inline-block;
-			width: 180px;
+			width: 205px;
+		}
+
+		.field > * {
+			vertical-align: middle;
 		}
 
 		.field > input, .field select {
@@ -58,6 +62,83 @@
 			position: absolute;
 			top: 0;
 			margin: 0;
+		}
+
+		input[type=range] {
+			-webkit-appearance: none;
+			margin: 5px 0;
+			padding: 0;
+		}
+		input[type=range]:focus {
+			outline: none;
+		}
+		input[type=range]::-webkit-slider-runnable-track {
+			height: 10px;
+			cursor: pointer;
+			background: #ffffff;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+		}
+		input[type=range]::-webkit-slider-thumb {
+			border: 1px solid #aaa;
+			height: 16px;
+			width: 16px;
+			border-radius: 8px;
+			background: #ffffff;
+			cursor: pointer;
+			-webkit-appearance: none;
+			margin-top: -4px;
+		}
+		input[type=range]:focus::-webkit-slider-runnable-track {
+			background: #ffffff;
+		}
+		input[type=range]::-moz-range-track {
+			height: 10px;
+			cursor: pointer;
+			background: #ffffff;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+		}
+		input[type=range]::-moz-range-thumb {
+			border: 1px solid #aaa;
+			height: 16px;
+			width: 16px;
+			border-radius: 8px;
+			background: #ffffff;
+			cursor: pointer;
+			margin-top: -4px;
+		}
+		input[type=range]::-ms-track {
+			height: 10px;
+			cursor: pointer;
+			background: transparent;
+			border-color: transparent;
+			color: transparent;
+		}
+		input[type=range]::-ms-fill-lower {
+			background: #f2f2f2;
+			border: 1px solid #ccc;
+			border-radius: 10px;
+		}
+		input[type=range]::-ms-fill-upper {
+			background: #ffffff;
+			border: 1px solid #ccc;
+			border-radius: 10px;
+		}
+		input[type=range]::-ms-thumb {
+			border: 1px solid #aaa;
+			height: 16px;
+			width: 16px;
+			border-radius: 8px;
+			background: #ffffff;
+			cursor: pointer;
+			margin-top: -4px;
+		}
+		input[type=range]:focus::-ms-fill-lower {
+			background: #ffffff;
+		}
+		input[type=range]:focus::-ms-fill-upper {
+			background: #ffffff;
 		}
 
 	</style>
@@ -104,11 +185,11 @@
 		<h3>Colors</h3>
 		<div class="field">
 			<label>Background color</label>
-			<input class="input-bg-color" name="background-color" type="colorpicker"  data-alpha="true" value="#f0f0f1" placeholder="Background color">
+			<input class="input-attr input-bg-color" name="data-bg-color" type="colorpicker"  data-alpha="true" value="#f0f0f1" placeholder="Background color">
 		</div>
 		<div class="field">
 			<label>Second Background color</label>
-			<input class="input-bg-color2" name="background-color2" type="colorpicker"  data-alpha="true" value="" placeholder="Bottom Color for Gradient">
+			<input class="input-attr input-bg-color2" name="data-bg-color2" type="colorpicker"  data-alpha="true" value="" placeholder="Bottom Color for Gradient">
 			<p>Use different second background color for a beautiful gradient!</p>
 		</div>
 		<div class="field">
@@ -135,23 +216,18 @@
 		</div>
 		<div class="field">
 			<label>Size</label>
-			<select class="input-style" name="font-size">
-				<option value="8px">Small</option>
-				<option value="12px" selected="selected">Medium</option>
-				<option value="16px">Large</option>
-				<option value="20px">Extra Large</option>
-				<option value="25px">Huge</option>
-			</select>
+			<input class="input-style" name="font-size" min="5" max="70" step="2" type="range">
 		</div>
 		<div class="field">
 			<label>Align</label>
-			<select class="input-attr" name="class">
-				<option value="pbtn" selected="selected">None</option>
-				<option value="pbtn align-left" selected="selected">Left</option>
-				<option value="pbtn align-center">Center</option>
-				<option value="pbtn align-right">Right</option>
+			<select class="input-style align" name="float">
+				<option selected="selected">None</option>
+				<option value="left">Left</option>
+				<option value="none">Center</option>
+				<option value="right">Right</option>
 			</select>
 		</div>
+		<input type="hidden" class="input-attr" name="class" value="pbtn">
 	</section>
 	<footer>
 		<input type="button" class="button-primary" id="submit" value="Insert Button">
@@ -160,34 +236,46 @@
 	<?php wp_print_footer_scripts(); ?>
 	<script src="<?php echo $_GET['assets_url'] . 'alpha-color.js' ?>"></script>
 	<link rel="stylesheet" href="<?php echo $_GET['assets_url'] . 'dashicons-select.css' ?>">
-	<script src="<?php echo $_GET['assets_url'] . 'dashicons-select.js' ?>"></script>
+	<script src="<?php echo $_GET['assets_url'] . 'dashicons-select.js?v=1.1' ?>"></script>
 
 	<script>
 		jQuery( function ( $ ) {
-			var get_input_styles, get_background, preview,
+			var get_input_attr, get_input_styles, get_background, preview,
 				params = top.tinymce.activeEditor.windowManager.getParams(),
 				$icon = $( '.button-icon' ),
 				$prevu = $( '#preview' ),
+				$text = $( '.button-text' ),
 				$style_inputs = $( '.input-style' ),
+				$attr_inputs = $( '.input-attr' ),
 				$submit = $( '#submit' );
 
 			<?php
 			if ( ! empty( $_GET['edit_button'] ) ) {
 				?>
-				var parts = params.button.attr( 'style' ).replace(/ /gi, '').split( ";" );
-				for (var i=0;i < parts.length; i++) {
-					var subParts = parts[i].split(':');
-					if ( subParts[1] ) {
-						var $f = $( '[name="' + subParts[0] + '"]' );
-						console.log( '[name="' + subParts[0] + '"]' + ' ' + $f.length )
-						if ( 'number' == $f.attr( 'type' ) ) {
-							$f.val( subParts[1].replace( 'px', '' ) ).change();
+				params.editing = true;
+				$style_inputs.each( function () {
+					var $t = $( this ),
+						name = $t.attr( 'name' ),
+						val = params.button.css( name );
+					console.log( name + ' : ' + val );
+					if ( val ) {
+						if ( 'number' == $t.attr( 'type' ) || 'range' == $t.attr( 'type' ) ) { val = val.replace( 'px', '' ); }
+						$t.val( val );
+					}
+				} );
+				$attr_inputs.each( function () {
+					var $t = $( this ),
+						name = $t.attr( 'name' ),
+						val = params.button.attr( name );
+					console.log( name + ' : ' + val );
+					if ( val ) {
+						if ( 'checkbox' == $t.attr( 'type' ) ) {
+							$t.prop( 'checked', true );
 						} else {
-							$f.val( subParts[1] ).change();
+							$t.val( val );
 						}
 					}
-				}
-				$( '[name="class"]' );
+				} );
 				<?php
 			}
 			?>
@@ -195,12 +283,26 @@
 			$icon.dashiconSelector();
 
 			preview = function () {
+				var text = $text.val() ? $text.val() : 'Text';
 				$prevu
 					.attr( 'style', get_input_styles() )
-					//.attr( 'class', $( '.button-icon' ).val() )
 					.data( 'hover-color', $( '.input-attr[name="data-hover-color"]' ).val() )
-					.html( $icon.val() + ' ' + $( '.button-text' ).val() );
+					.html( $icon.val() + ' ' + text );
 				$( 'section' ).css( 'padding-top', $( 'header.preview' ).outerHeight() - 7 );
+			};
+
+			get_input_attr = function () {
+				var return_text = '';
+
+				// Button attributes
+				$attr_inputs.each( function () {
+					var $t = $( this );
+					return_text += $t.attr( 'name' ) + '="' + $t.val() + '" ';
+				} );
+
+				// Button styles
+				return_text += 'style="' + get_input_styles();
+				return return_text;
 			};
 
 			get_input_styles = function () {
@@ -210,11 +312,11 @@
 					var val = $t.val();
 
 					if ( ! val ) { return; }
-					if ( 'number' == $t.attr( 'type' ) ) { val = $t.val() + 'px'; }
+					if ( 'number' == $t.attr( 'type' ) || 'range' == $t.attr( 'type' ) ) { val = $t.val() + 'px'; }
 
 					return_text += $t.attr( 'name' ) + ':' + val + ';';
 				} );
-				return return_text + get_background() + 'display:inline-block;padding: 0.5em 1em;text-decoration: none;';
+				return return_text + get_background() + 'display:inline-block;padding:0.5em 1em;text-decoration:none;line-height:1;';
 			};
 
 			get_background = function () {
@@ -222,7 +324,6 @@
 					color = $( '.input-bg-color' ).val(),
 					color2 = $( '.input-bg-color2' ).val();
 				return_text += 'background-color:' + color + ';';
-
 				if ( color2 ) {
 					var gradient = 'linear-gradient(' + color + ',' + color2 + ')';
 					return_text += 'background:-webkit-' + gradient + ';';
@@ -235,9 +336,9 @@
 
 			$( 'input[type="colorpicker"]' ).each( function () {
 				var $t = $( this );
-				$t.libColorPicker({
+				$t.libColorPicker( {
 					change: preview
-				});
+				} );
 			} );
 
 			$submit.click( function () {
@@ -246,14 +347,19 @@
 					style = '',
 					ed = params.editor;
 
-				// Button attributes
-				$( '.input-attr' ).each( function () {
-					var $t = $( this );
-					return_text += $t.attr( 'name' ) + '="' + $t.val() + '" ';
-				} );
+				return_text += get_input_attr() + '">' + $icon.val() + ' ' + $text.val() + "</a>&nbsp;\n";
 
-				// Button styles
-				return_text += 'style="' + get_input_styles() + '">' + $icon.val() + ' ' + $( '.button-text' ).val() + "</a>&nbsp;\n";
+				console.log( return_text );
+				if ( params.editing ) {
+					ed.dom.setStyle( params.button.closest( 'p.pbtn' )[0], 'text-align', '' );
+					if ( 'none' == $('.input-style.align' ).val() ) {
+						ed.dom.setStyle( params.button.closest( 'p.pbtn' )[0], 'text-align', 'center' );
+					}
+				} else if ( 'none' == $('.input-style.align' ).val() ) {
+					return_text = '<p class="pbtn" style="clear:both;text-align:center">' + return_text + '</p>';
+				} else {
+					return_text = '<p class="pbtn" style="clear:both;">' + return_text + '</p>';
+				}
 
 				ed.execCommand( 'mceInsertContent', 0, return_text );
 				ed.windowManager.close();

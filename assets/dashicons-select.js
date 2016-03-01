@@ -8,24 +8,36 @@
 			$di = $( '<div/>' ).addClass( 'dashicons-all-icons' ).css( 'display', 'none' ),
 			$diwrap = $( '<div/>' ).addClass( 'dashicons-all-icons-wrap' ).css( 'display', 'inline-block' ),
 			$btn = $( '<button/>' ).addClass( 'button button-primary' ).html( 'Choose Icon' ),
+			$remove = $( '<button/>' ).addClass( 'button' ).html( 'No Icon' ),
 			val = this.val(),
 			$input = this;
 
+		$di.append( $remove );
+		$di.append( $('<br>') );
 		$.each( $.fn.dashicons, function( k, icon ) {
 			var ico = 'dashicons dashicons-' + icon;
-			$i = $( '<i/>' ).addClass( ico );
+			$i = $( '<i/>' ).addClass( ico ).css("vertical-align","middle");
 			$i.click( function() {
 				var $t = $( this );
 				$input.val( $t.prop('outerHTML') ).change();
+				$btn.show();
 				$di.hide();
 			} );
 			$di.append( $i );
+		} );
+
+		$remove.click( function () {
+			var $t = $( this );
+			$input.val( '' ).change();
+			$btn.show();
+			$di.hide();
 		} );
 
 		$diwrap.append( $btn ); // Adding Button
 		$diwrap.append( $di ); // Adding dashicons list
 		$input.after( $diwrap ); // Adding wrap besides the input
 		$btn.click( function() {
+			$btn.hide();
 			$di.show();
 		} );
 		$input.change( function () {

@@ -26,9 +26,9 @@ add_action( 'wp_footer', 'pbtn_script', 16 );
 function pbtn_script() {
 	?>
 	<style id="pbtn-styles">
-		.pbtn.align-left{float:right;}
-		.pbtn.align-center{display: block;margin: auto;}
-		.pbtn.align-right{float: right;}
+		.pbtn.pbtn-left{float:left;}
+		.pbtn.pbtn-center{}
+		.pbtn.pbtn-right{float: right;}
 	</style>
 	<script>
 		jQuery( function ($) {
@@ -72,6 +72,8 @@ function pbtn_add_tinymce_button( $plugin_array ) {
 
 add_filter( 'wp_kses_allowed_html', 'pbtn_kses_allowed_html' );
 function pbtn_kses_allowed_html( $tags ) {
+	$tags['a']['data-bg-color'] = true;
+	$tags['a']['data-bg-color2'] = true;
 	$tags['a']['data-hover-color'] = true;
 
 	return $tags;
