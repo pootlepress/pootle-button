@@ -34,7 +34,7 @@
 						icon = btn.find('i').length ? encodeURIComponent( btn.find('i').prop( 'outerHTML' ) ) : '';
 					ed.selection.select( btn[0] );
 					ed.windowManager.open( {
-						title: 'Insert Button',
+						title: 'Edit Button',
 						url : pbtn.dialogUrl + '&edit_button=1&assets_url=' + ass_url + '&text=' + btn.text() +
 						      '&icon=' + icon + '&url=' + href,
 						width : 500,

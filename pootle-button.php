@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: pootle buttons
+ * Plugin Name: pootle button
  * Plugin URI: http://pootlepress.com/
  * Description: A cool plugin to add delicious buttons in WordPress editor
  * Version: 0.7

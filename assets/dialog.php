@@ -1,3 +1,6 @@
+<?php
+$editing = ! empty( $_GET['edit_button'] );
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -182,6 +185,19 @@
 			<label>Icon</label>
 			<input type="hidden" class="button-icon" name="dashicon"  value="<?php echo htmlspecialchars( filter_input( INPUT_GET, 'icon' ) ) ?>">
 		</div>
+		<div class="field">
+			<label>Size</label>
+			<input class="input-style" name="font-size" min="5" max="70" step="2" type="range" value="25">
+		</div>
+		<div class="field">
+			<label>Align</label>
+			<select class="input-style align" name="float">
+				<option selected="selected">None</option>
+				<option value="left">Left</option>
+				<option value="none">Center</option>
+				<option value="right">Right</option>
+			</select>
+		</div>
 		<h3>Colors</h3>
 		<div class="field">
 			<label>Background color</label>
@@ -214,23 +230,10 @@
 			<label>Border Radius ( pixels )</label>
 			<input class="input-style" name="border-radius" type="number" min="0" value="0" max="99">
 		</div>
-		<div class="field">
-			<label>Size</label>
-			<input class="input-style" name="font-size" min="5" max="70" step="2" type="range" value="25">
-		</div>
-		<div class="field">
-			<label>Align</label>
-			<select class="input-style align" name="float">
-				<option selected="selected">None</option>
-				<option value="left">Left</option>
-				<option value="none">Center</option>
-				<option value="right">Right</option>
-			</select>
-		</div>
 		<input type="hidden" class="input-attr" name="class" value="pbtn">
 	</section>
 	<footer>
-		<input type="button" class="button-primary" id="submit" value="Insert Button">
+		<input type="button" class="button-primary" id="submit" value="<?php echo $editing ? 'Update Button' : 'Insert Button'; ?>">
 	</footer>
 
 	<?php wp_print_footer_scripts(); ?>
@@ -250,7 +253,7 @@
 				$submit = $( '#submit' );
 
 			<?php
-			if ( ! empty( $_GET['edit_button'] ) ) {
+			if ( $editing ) {
 				?>
 				params.editing = true;
 				$style_inputs.each( function () {
