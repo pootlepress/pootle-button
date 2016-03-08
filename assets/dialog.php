@@ -26,7 +26,7 @@ $editing = ! empty( $_GET['edit_button'] );
 			color: #333;
 		}
 		.field {
-			margin: 1em;
+			margin: 1em 0;
 		}
 
 		.field > label {
@@ -38,8 +38,27 @@ $editing = ! empty( $_GET['edit_button'] );
 			vertical-align: middle;
 		}
 
-		.field > input, .field select {
-			width: 160px;
+		.field > .input-wrap, .field > input, .field select {
+			width: 178px;
+		}
+
+		.field > .input-wrap {
+			display: inline-block;
+			position: relative;
+			font-size: 0;
+		}
+
+		.field > .input-wrap * {
+			font-size: 16px;
+		}
+
+		.field input[type="range"] {
+			width: 133px;
+		}
+
+		.field #font-size-helper {
+			width: 40px;
+			margin-left: 5px;
 		}
 
 		header, footer {
@@ -187,12 +206,15 @@ $editing = ! empty( $_GET['edit_button'] );
 		</div>
 		<div class="field">
 			<label>Size</label>
-			<input class="input-style" name="font-size" min="5" max="70" step="2" type="range" value="25">
+			<span class="input-wrap">
+				<input class="input-style" name="font-size" min="8" max="70" step="2" type="range" value="25" onchange='jQuery("#font-size-helper").val(this.value)'>
+				<input id="font-size-helper" readonly="readonly">
+			</span>
 		</div>
 		<div class="field">
 			<label>Align</label>
 			<select class="input-style align" name="float">
-				<option selected="selected">None</option>
+				<option value="" selected="selected">None</option>
 				<option value="left">Left</option>
 				<option value="none">Center</option>
 				<option value="right">Right</option>
@@ -248,6 +270,7 @@ $editing = ! empty( $_GET['edit_button'] );
 				$icon = $( '.button-icon' ),
 				$prevu = $( '#preview' ),
 				$text = $( '.button-text' ),
+				$align = $( '.input-style.align' ),
 				$style_inputs = $( '.input-style' ),
 				$attr_inputs = $( '.input-attr' ),
 				$submit = $( '#submit' );
@@ -260,7 +283,6 @@ $editing = ! empty( $_GET['edit_button'] );
 					var $t = $( this ),
 						name = $t.attr( 'name' ),
 						val = params.button.css( name );
-					console.log( name + ' : ' + val );
 					if ( val ) {
 						if ( 'number' == $t.attr( 'type' ) || 'range' == $t.attr( 'type' ) ) { val = val.replace( 'px', '' ); }
 						$t.val( val );
@@ -278,6 +300,12 @@ $editing = ! empty( $_GET['edit_button'] );
 						}
 					}
 				} );
+
+				if ( 'center' != params.button.closest( 'p.pbtn' ).css( 'text-align' ) ) {
+					if ( 'none' == $align.val() ) {
+						$align.val( '' );
+					}
+				}
 				<?php
 			}
 			?>
@@ -299,7 +327,11 @@ $editing = ! empty( $_GET['edit_button'] );
 				// Button attributes
 				$attr_inputs.each( function () {
 					var $t = $( this );
-					return_text += $t.attr( 'name' ) + '="' + $t.val() + '" ';
+					if ( $t.attr( 'type' ) != 'checkbox' || $t.prop( 'checked' ) ) {
+						if ( $t.val() ) {
+							return_text += $t.attr( 'name' ) + '="' + $t.val() + '" ';
+						}
+					}
 				} );
 
 				// Button styles
@@ -352,25 +384,23 @@ $editing = ! empty( $_GET['edit_button'] );
 
 				return_text += get_input_attr() + '">' + $icon.val() + ' ' + $text.val() + "</a>&nbsp;\n";
 
-				console.log( return_text );
 				if ( params.editing ) {
 					ed.dom.setStyle( params.button.closest( 'p.pbtn' )[0], 'text-align', '' );
-					if ( 'none' == $('.input-style.align' ).val() ) {
+					if ( 'none' == $align.val() ) {
 						ed.dom.setStyle( params.button.closest( 'p.pbtn' )[0], 'text-align', 'center' );
 					}
-				} else if ( 'none' == $('.input-style.align' ).val() ) {
+				} else if ( 'none' == $align.val() ) {
 					return_text = '<p class="pbtn" style="clear:both;text-align:center">' + return_text + '</p>';
 				} else {
 					return_text = '<p class="pbtn" style="clear:both;">' + return_text + '</p>';
 				}
-
 				ed.execCommand( 'mceInsertContent', 0, return_text );
 				ed.windowManager.close();
 			} );
 
 			$style_inputs.change( preview );
 			$( '.button-text, .button-icon' ).change( preview );
-			$style_inputs.last().change();
+			$style_inputs.filter('[name="font-size"]').change();
 			$prevu.hover(
 				function() {
 					var $t = $( this );
