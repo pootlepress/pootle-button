@@ -1,6 +1,6 @@
 === pootle button ===
 
-Contributors: pootlepress
+Contributors: pootlepress, shramee
 Plugin Name: pootle button
 Plugin URI: http://www.pootlepress.com/pootle-button
 Tags: button, buttons, button builder, buttons builder, make button, add button, insert button, create button, button in editor, pootle button, pootle, cool button
@@ -9,7 +9,7 @@ Author: PootlePress
 Donate link:
 Requires at least: 4.1.0
 Tested up to: 4.4.2
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -35,8 +35,8 @@ With pootle buttons you can:
 
 Pootle button makes managing buttons, the most important part of a website's User Interface, incredibly easy
 
- * Feels as much like WordPress
- * Integrated well into wordpress editor
+ * Feels very much like WordPress.
+ * Integrated well into WordPress editor.
 
 = Can I see pootle button in action? =
 
@@ -79,6 +79,13 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 5. Editing existing buttons
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+* 2016-03-08
+* Enhancement - Numeric size scal besides size slider
+* Fixed - Vertical alignment for large buttons with icon
+* Fixed - Button always opening url in new tab
+* Fixed - Editing button with no alignment gets aligned to center
 
 = 1.0.0 =
 * 2016-03-03
