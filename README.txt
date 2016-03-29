@@ -81,7 +81,7 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 == Upgrade Notice ==
 
 = 1.1.1 =
-* 2016-03-08
+* 2016-03-29
 * Fixed - Firefox hover color not reverting on mouseout
 
 = 1.1.0 =
