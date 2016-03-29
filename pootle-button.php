@@ -39,7 +39,9 @@ function pbtn_script() {
 						$t.css( 'opacity', '0.7' );
 						return;
 					}
-					$t.data( 'background', $t.css( 'background' ) );
+					var background = $t.css( 'background' );
+					background = background ? background : $t.css( 'background-color' );
+					$t.data( 'background', background );
 					$t.css( 'background', $t.data( 'hover-color' ) );
 				},
 				function() {

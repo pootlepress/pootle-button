@@ -68,7 +68,7 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 
 == Screenshots ==
 
-1. Insert button button in WordPress editor
+1. *Insert button* button in WordPress editor
 
 2. Button General Settings
 
@@ -76,7 +76,7 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 
 4. Button Border Settings
 
-5. Editing existing buttons
+5. Editing an existing button
 
 == Upgrade Notice ==
 
