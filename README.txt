@@ -80,9 +80,13 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 
 == Upgrade Notice ==
 
+= 1.1.1 =
+* 2016-03-08
+* Fixed - Firefox hover color not reverting on mouseout
+
 = 1.1.0 =
 * 2016-03-08
-* Enhancement - Numeric size scal besides size slider
+* Enhancement - Numeric size scale besides size slider
 * Fixed - Vertical alignment for large buttons with icon
 * Fixed - Button always opening url in new tab
 * Fixed - Editing button with no alignment gets aligned to center
