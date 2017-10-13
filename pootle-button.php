@@ -3,7 +3,7 @@
  * Plugin Name: pootle button
  * Plugin URI: http://pootlepress.com/
  * Description: A cool plugin to add delicious buttons in WordPress editor
- * Version: 1.1.1
+ * Version: 1.2.0
  * Author: pootlepress
  * Author URI: http://pootlepress.com/
  * License: GPL version 3

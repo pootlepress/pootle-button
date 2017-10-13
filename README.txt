@@ -9,7 +9,7 @@ Author: PootlePress
 Donate link:
 Requires at least: 4.1.0
 Tested up to: 4.4.2
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -79,6 +79,10 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 5. Editing an existing button
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+* 2016-03-29
+* Tweak - Escaping vars
 
 = 1.1.1 =
 * 2016-03-29
